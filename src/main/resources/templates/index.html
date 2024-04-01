@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Liste des Avions</title>
+</head>
+<body>
+	<p><a href="/login?logout">logout</a></p>
+    <h1>Liste des Avions</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Constructeur</th>
+                <th>Modèle</th>
+                <th>Passager</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="avion : ${lstAvions}">
+                <td th:text="${avion.code}"/>
+                <td th:text="${avion.constructeur}"/>
+                <td th:text="${avion.model}"/>
+                <td>
+					<table>
+				        <thead>
+				            <tr>
+				                <th>Nom</th>
+				                <th>Prenom</th>
+				                <th>Age</th>
+				            </tr>
+				        </thead>
+                        <tbody>
+            				<tr th:each="passager : ${avion.lstPassagers}">
+                				<td th:text="${passager.nom}"/>
+                				<td th:text="${passager.prenom}"/>
+                				<td th:text="${passager.age}"/>
+                			</tr>
+                		</tbody>
+                   	</table> 
+                    <a th:href="@{/avions/debarquement/{id} (id=${avion.idAvion})}">
+						<button class="passagers-btn">Debarquer</button>
+					</a>
+                    <a th:each="aeroport : ${lstAeroports}" th:href="@{/avions/decolage/{aeroport}/{id} (aeroport=${aeroport},id=${avion.idAvion})}">
+	                    <button  th:text="${aeroport}" class="decolage-btn"/>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+   	<h1>Liste des passagers</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Age</th>
+                <th>action</th>
+                <th>Avion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="passager : ${lstPassagers}">
+                <td th:text="${passager.nom}"/>
+                <td th:text="${passager.prenom}"/>
+                <td th:text="${passager.age}"/>
+                <td th:if="${passager.avion==null}" >
+					<a th:each="avion : ${lstAvions}" th:href="@{/avions/embarquement/{idAvion}/{idPassager} (idAvion=${avion.idAvion},idPassager=${passager.idPassager})}">
+						<button th:text="${avion.code}"class="passagers-btn">
+					</a>
+				</td>
+                <td th:if="${passager.avion!=null}" th:text="${passager.avion.code}"/>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
